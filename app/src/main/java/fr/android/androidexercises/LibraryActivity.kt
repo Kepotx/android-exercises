@@ -7,18 +7,27 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
+import android.view.LayoutInflater
+import android.support.v7.widget.GridLayoutManager
+import android.support.v7.widget.RecyclerView
+import java.util.*
+
 
 class LibraryActivity : AppCompatActivity() {
+
+    private val RANDOM = Random()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_library)
-        val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
 
-        val messageTextView = findViewById<View>(R.id.messageTextView) as TextView
-        // TODO call setText() on messageTextView
+        val books = getBooks()
 
-        setSupportActionBar(toolbar)
+        //val isLandscape = resources.getBoolean(R.bool.landscape)
+        val isLandscape = true
+        val recyclerView:RecyclerView  = findViewById(R.id.bookListView)
+        recyclerView.setLayoutManager(GridLayoutManager(this, if (isLandscape) 2 else 1))
+        recyclerView.setAdapter(BookAdapter2(LayoutInflater.from(this), getBooks(), R.layout.custom_view_item_book))
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -34,5 +43,16 @@ class LibraryActivity : AppCompatActivity() {
         val id = item.itemId
 
         return if (id == R.id.action_settings) true else super.onOptionsItemSelected(item)
+    }
+
+    private fun getBooks(): List<Book> {
+        val books = ArrayList<Book>()
+        for (i in 0..99) {
+            books.add(Book(
+                    String.format(Locale.FRANCE, "Garry Potier Tome %d", i),
+                    RANDOM.nextInt(30).toFloat())
+            )
+        }
+        return books
     }
 }
