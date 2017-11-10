@@ -17,12 +17,17 @@ class BookAdapter2(private val mInflater: LayoutInflater, private val mBooks: Li
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        (holder.itemView as BookItemView).bindView(mBooks[position])
+        val itemView = holder?.itemView;
+        return when(holder.itemView) {
+            is BookItemView -> holder.itemView.bindView((mBooks[position]))
+            else -> {
+                
+            }
+        }
+        //(holder.itemView as BookItemView).bindView(mBooks[position])
     }
 
-    override fun getItemCount(): Int {
-        return mBooks.size
-    }
+    override fun getItemCount(): Int= mBooks.size
 
     class ViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView)
 }
